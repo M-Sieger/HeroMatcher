@@ -1,0 +1,825 @@
+# 🏗️ Copilot Project Builder – From Scratch Setup Prompt
+
+**Version:** 1.0  
+**Erstellt:** 21. Oktober 2025  
+**Zweck:** Greenfield-Projekte von Grund auf strukturiert aufbauen  
+**Methodischer Benchmark:** 360Volt-docu-MVP (Dokumentations-Standards & Workflow)
+
+---
+
+## ⚠️ WICHTIG: Unterschied zum Repo-Analyzer
+
+**Repo-Analyzer:** Analysiert **bestehende** Projekte und verbessert sie  
+**Project-Builder:** Baut **neue** Projekte von Grund auf mit sauberer Struktur
+
+**✅ Was übernommen wird (360Volt-Methodik):**
+- **Dokumentations-First:** Primary SoT definieren, bevor Code geschrieben wird
+- **Type-Safety:** Strict-Mode von Anfang an (sprachabhängig)
+- **Testing-Setup:** Test-Framework + CI/CD von Tag 1
+- **Git-Workflow:** Conventional Commits + CHANGELOG.md Setup
+- **Code-Quality:** Pre-Commit-Hooks + Linting vor erstem Commit
+
+**❌ Was NICHT übernommen wird (projektabhängig):**
+- **Tech-Stack:** Wird proaktiv ermittelt (nicht React/Fastify default)
+- **Mobile-First:** Nur wenn Projekt Mobile-App/PWA ist
+- **Offline-First:** Nur wenn Anforderung besteht (Field-Worker, etc.)
+
+**🧠 Proaktive Ermittlung:**
+Copilot fragt gezielt nach Product Vision, Zielgruppe, Tech-Präferenzen und leitet daraus die optimale Projekt-Struktur ab.
+
+---
+
+## 🎭 ROLLEN FÜR COPILOT (Project-Setup)
+
+### **Phase 1: Vision Discovery (Was soll gebaut werden?)**
+**Rolle:** 🎨 **Product Visionary + Tech Consultant**
+- **Perspektive:** Verstehen der Geschäftsidee und technischen Anforderungen
+- **Fokus:** Product Vision, Zielgruppe, Kern-Features, Tech-Präferenzen
+- **Stil:** Fragend, beratend, explorativ
+- **Output:** Product-Vision-Dokument mit klaren Requirements
+
+### **Phase 2: Architecture Design (Wie wird es gebaut?)**
+**Rolle:** 🏛️ **Solution Architect**
+- **Perspektive:** Best-Practice-basierte Architektur-Entscheidungen
+- **Fokus:** Tech-Stack-Auswahl, Ordnerstruktur, API-Design, Data-Flow
+- **Stil:** Begründet, best-practice-orientiert, zukunftssicher
+- **Output:** Architecture-Decision-Records (ADRs) + Ordnerstruktur
+
+### **Phase 3: Foundation Setup (Projekt initialisieren)**
+**Rolle:** 🔧 **DevOps Engineer + Setup-Spezialist**
+- **Perspektive:** Reproduzierbares, wartbares Setup
+- **Fokus:** Dependencies installieren, Config-Files, Git-Setup, CI/CD-Basics
+- **Stil:** Automatisiert, dokumentiert, onboarding-freundlich
+- **Output:** Lauffähiges Projekt-Skeleton mit README
+
+### **Phase 4: Core Implementation (MVP Features)**
+**Rolle:** 👨‍💻 **Senior Full-Stack Engineer**
+- **Perspektive:** Clean Code, testbar, erweiterbar
+- **Fokus:** Kern-Features implementieren, Tests schreiben, Docs pflegen
+- **Stil:** Production-ready, kommentiert, best-practices
+- **Output:** Lauffähiges MVP mit Tests
+
+### **Phase 5: Polish & Handover (Production-Ready)**
+**Rolle:** 🎯 **Tech Lead + Documentation-Spezialist**
+- **Perspektive:** Team-Onboarding, Deployment, Wartbarkeit
+- **Fokus:** CONTRIBUTING.md, Deployment-Docs, Monitoring-Setup
+- **Stil:** Teamorientiert, transparent, nachhaltig
+- **Output:** Production-Ready Projekt mit vollständiger Dokumentation
+
+---
+
+## 🚀 WIE DIESER PROMPT FUNKTIONIERT
+
+### **Ziel**
+Dieser Prompt baut ein **neues Projekt von Grund auf** und:
+1. ✅ **Ermittelt** Product Vision & technische Anforderungen (proaktiv)
+2. ✅ **Designed** optimale Architektur basierend auf Requirements
+3. ✅ **Initialisiert** Projekt mit Best-Practice-Setup (Git, CI/CD, Linting)
+4. ✅ **Implementiert** MVP Features mit Tests & Docs
+5. ✅ **Polished** für Production-Readiness (Deployment, Monitoring, Onboarding)
+
+### **Adaptive Project-Setup**
+Der Prompt passt sich automatisch an den Projekt-Typ an:
+- **PWA/Web-App:** Vite + React/Vue, PWA-Manifest, Service Worker
+- **Flutter-App:** Flutter CLI, Riverpod/Bloc, Material Design Theme
+- **Backend-API:** Fastify/Django/Rails, OpenAPI, Rate-Limiting
+- **Data-Science:** Jupyter + DVC, Reproducibility-Setup, MLflow
+
+### **Einsatz**
+```bash
+# 1. Erstelle leeres Repo
+mkdir my-new-project && cd my-new-project
+git init
+
+# 2. Kopiere diesen Prompt ins Projekt
+curl -o docs/COPILOT-PROJECT-BUILDER-PROMPT.md https://...
+
+# 3. Öffne in VSCode/Codespaces
+
+# 4. Sage zu Copilot:
+"Baue ein neues Projekt nach COPILOT-PROJECT-BUILDER-PROMPT.md"
+
+# 5. Copilot führt Phase 1-5 aus und erstellt Production-Ready Projekt
+```
+
+---
+
+## 🎯 PROMPT FÜR COPILOT (COPY-PASTE)
+
+```
+# === PROJECT-BUILD-AUFTRAG ===
+
+Du bist ein Senior Solution Architect und sollst ein neues Projekt von Grund auf strukturiert aufbauen.
+
+**Methodischer Benchmark:** 360Volt-docu-MVP (Dokumentations-Standards, nicht Tech-Stack)
+- ✅ Dokumentations-First (Primary SoT vor erstem Code)
+- ✅ Type-Safety (sprachabhängig: TypeScript Strict, Python Type Hints, Dart Null-Safety)
+- ✅ Testing-Setup (Unit + E2E Framework von Tag 1)
+- ✅ Git-Workflow (Conventional Commits + CHANGELOG.md Setup)
+- ✅ Code-Quality (Pre-Commit-Hooks + Linting vor erstem Commit)
+
+**❌ NICHT übernehmen (projektabhängig ermitteln):**
+- Tech-Stack (React, Fastify, etc. sind 360Volt-spezifisch)
+- Mobile-First (nur für PWAs/Mobile-Apps)
+- Offline-First (nur wenn Anforderung besteht)
+
+**Deine Aufgabe:** Baue dieses Projekt in 5 Phasen auf und erstelle nach jeder Phase einen Report.
+
+---
+
+## PHASE 1: VISION DISCOVERY (Was soll gebaut werden?)
+
+**Ziel:** Product Vision und technische Anforderungen verstehen.
+
+**Tasks:**
+1. **Rückfragen stellen (proaktiv):**
+   - "Was ist das Hauptziel dieses Projekts? (Problemstellung?)"
+   - "Wer ist die Zielgruppe? (B2C, B2B, Intern, Field-Worker?)"
+   - "Welche Plattform? (Web, Mobile iOS/Android, Desktop, Backend-API?)"
+   - "Kern-Features? (3-5 wichtigste Funktionen für MVP?)"
+   - "Tech-Präferenzen? (TypeScript/Python/Dart? React/Vue/Flutter?)"
+   - "Spezielle Anforderungen? (Offline, Real-time, High-Traffic, Compliance?)"
+   - "Team-Größe? (Solo, 2-5 Devs, >5 Devs?)"
+   - "Deployment-Präferenz? (Cloud/Vercel/Netlify, On-Premise, App-Stores?)"
+
+2. **Product Vision ableiten:**
+   - Aus User-Antworten Vision-Statement formulieren
+   - User-Stories für MVP definieren (3-5 Stories)
+   - Success-Metrics festlegen (was macht MVP erfolgreich?)
+
+3. **Tech-Stack vorschlagen (begründet):**
+   - **Sprache:** TypeScript / Python / Dart (basierend auf Team-Skills + Plattform)
+   - **Framework:** React / Vue / Flutter / Django (basierend auf Anforderungen)
+   - **State-Management:** Zustand / Pinia / Riverpod / Redux (basierend auf Komplexität)
+   - **Testing:** Vitest / Pytest / Flutter-Test (basierend auf Framework)
+   - **Build-Tool:** Vite / Webpack / Flutter-CLI (basierend auf Framework)
+
+4. **Non-Functional-Requirements ableiten:**
+   - Performance-Ziele (LCP, FCP, TTI)
+   - Security-Level (Authentication, Authorization, Data-Encryption)
+   - Accessibility-Ziel (WCAG AA, WCAG AAA)
+   - Browser-Support (Modern Browsers, IE11)
+
+**Output:**
+Erstelle `/docs/PRODUCT-VISION.md` mit:
+```markdown
+# Product Vision
+
+## Problem Statement
+[Was ist das Problem, das gelöst wird?]
+
+## Target Audience
+- **Primär:** [B2C Endkunden / B2B Kunden / Interne Mitarbeiter / Field-Worker]
+- **Plattform:** [Web (Desktop/Mobile) / Native Mobile (iOS/Android) / Backend-API]
+- **Nutzungskontext:** [Büro / Unterwegs / Vor Ort]
+
+## Vision Statement
+[1-2 Sätze: Was soll dieses Produkt erreichen?]
+
+## MVP User Stories (Must-Have)
+1. **Als** [User-Typ] **möchte ich** [Funktion] **damit** [Nutzen]
+2. **Als** [User-Typ] **möchte ich** [Funktion] **damit** [Nutzen]
+3. **Als** [User-Typ] **möchte ich** [Funktion] **damit** [Nutzen]
+
+## Success Metrics
+- [ ] [Metrik 1: z.B. "10 User können MVP nutzen"]
+- [ ] [Metrik 2: z.B. "Onboarding <5 Min"]
+- [ ] [Metrik 3: z.B. "Performance: LCP <2s"]
+
+## Tech-Stack (Vorgeschlagen)
+- **Sprache:** TypeScript 5.x
+- **Framework:** React 18 + Vite 5
+- **State-Management:** Zustand 5
+- **Styling:** Tailwind CSS 3
+- **Testing:** Vitest + Playwright
+- **Backend (falls relevant):** Fastify 5 + PostgreSQL
+
+**Begründung:**
+- TypeScript: Type-Safety, großes Ökosystem, Team-Erfahrung
+- React + Vite: Schneller Build, große Community, Modern
+- Zustand: Einfach, performant, weniger Boilerplate als Redux
+- Tailwind: Utility-First, schnelles Styling, Mobile-First
+- Vitest: Schnell, Vite-native, ESM-Support
+- Playwright: Cross-Browser E2E, stabil, gute Developer-Experience
+
+## Non-Functional Requirements
+- **Performance:** LCP <2s, FCP <1s, TTI <3s
+- **Security:** JWT-Auth, HTTPS, Input-Validation
+- **Accessibility:** WCAG 2.2 AA (Kontrast ≥4.5:1, Keyboard-Navigation)
+- **Browser-Support:** Chrome/Firefox/Safari/Edge (letzte 2 Versionen)
+- **Mobile-Support:** iOS 15+, Android 12+ (falls Mobile-App)
+
+## Out-of-Scope (Nicht-MVP)
+- [Feature 1, das später kommt]
+- [Feature 2, das später kommt]
+```
+
+**Acceptance Criteria:**
+- [ ] Product Vision klar formuliert
+- [ ] 3-5 MVP User Stories definiert
+- [ ] Tech-Stack vorgeschlagen + begründet
+- [ ] Non-Functional Requirements klar
+- [ ] User hat Tech-Stack bestätigt
+
+**Fortschritt:** Phase 1 abgeschlossen → Warte auf User-Bestätigung: "✅ Tech-Stack OK? Weiter mit Phase 2?"
+
+---
+
+## PHASE 2: ARCHITECTURE DESIGN (Wie wird es gebaut?)
+
+**Ziel:** Technische Architektur designen und dokumentieren.
+
+**Tasks:**
+1. **Ordnerstruktur entwerfen:**
+   - **Monorepo vs. Multi-Repo:** (basierend auf Team-Größe + Deployment)
+   - **Feature-based vs. Layer-based:** (basierend auf Projekt-Komplexität)
+   - **Beispiel React-PWA:**
+     ```
+     /
+     ├── src/
+     │   ├── components/       [Wiederverwendbare UI-Components]
+     │   ├── features/          [Feature-basierte Module]
+     │   │   ├── auth/         [Login, Signup, Password-Reset]
+     │   │   ├── dashboard/    [Dashboard-UI + Logic]
+     │   │   └── settings/     [User-Settings]
+     │   ├── services/          [API-Calls, External-Services]
+     │   ├── store/             [State-Management]
+     │   ├── types/             [TypeScript-Type-Definitions]
+     │   ├── utils/             [Helper-Functions]
+     │   └── App.tsx
+     ├── public/
+     ├── tests/                 [E2E-Tests (Playwright)]
+     ├── docs/                  [Projekt-Dokumentation]
+     ├── .github/
+     │   ├── workflows/        [CI/CD]
+     │   └── copilot-instructions.md
+     └── config/                [Config-Files (phases.json, etc.)]
+     ```
+
+2. **API-Design (falls Backend):**
+   - REST vs. GraphQL vs. tRPC (basierend auf Anforderungen)
+   - Endpoint-Naming (RESTful: `/api/v1/users`, `/api/v1/projects`)
+   - Request/Response-Format (JSON, standardisierte Errors)
+   - Authentication-Flow (JWT, OAuth2, API-Keys)
+
+3. **Data-Flow dokumentieren:**
+   - Frontend → Backend (API-Calls)
+   - State-Management (Zustand, Redux, Pinia)
+   - Persistence (LocalStorage, IndexedDB, Backend-DB)
+   - Offline-Sync (falls Offline-First)
+
+4. **Testing-Strategie:**
+   - **Unit-Tests:** Services, Utils, Business-Logic (Vitest, Pytest)
+   - **Component-Tests:** UI-Components (Vitest + Testing-Library)
+   - **Integration-Tests:** API-Calls (Vitest, Supertest)
+   - **E2E-Tests:** User-Flows (Playwright, Cypress)
+   - **Coverage-Ziel:** >70% für kritische Pfade
+
+5. **CI/CD-Pipeline planen:**
+   - **Trigger:** Push zu `main`, Pull-Request
+   - **Jobs:** Lint, TypeScript-Check, Unit-Tests, E2E-Tests
+   - **Deployment:** Automatisch zu Staging bei PR-Merge, Manuell zu Production via Tag
+
+**Output:**
+Erstelle `/docs/ARCHITECTURE.md` mit:
+```markdown
+# Architecture Documentation
+
+## Tech-Stack
+- **Frontend:** React 18 + TypeScript 5 + Vite 5
+- **State-Management:** Zustand 5
+- **Styling:** Tailwind CSS 3
+- **Testing:** Vitest (Unit) + Playwright (E2E)
+- **Backend:** Fastify 5 + PostgreSQL 16
+- **Deployment:** Vercel (Frontend), Railway (Backend)
+
+## Ordnerstruktur
+[Siehe oben - detailliert mit Erklärungen]
+
+## API-Design (Backend)
+### Endpoints
+- `GET /api/v1/users/me` - Get current user
+- `POST /api/v1/auth/login` - Login (returns JWT)
+- `GET /api/v1/projects` - List projects (paginated)
+- `POST /api/v1/projects` - Create project
+
+### Authentication
+- JWT-based (Access-Token + Refresh-Token)
+- Access-Token: 15 Min Lifetime, stored in Memory
+- Refresh-Token: 7 Days, stored in HttpOnly-Cookie
+
+## Data-Flow
+```
+User-Action → Component → Zustand-Store → API-Service → Backend
+                                              ↓
+                                        Update-Store → Re-Render
+```
+
+## Testing-Strategie
+- **Unit-Tests:** Services (100%), Utils (100%), Components (70%)
+- **E2E-Tests:** 3 Happy-Paths (Login, Create-Project, View-Dashboard)
+- **Coverage-Ziel:** >70% Gesamt
+
+## CI/CD-Pipeline
+```yaml
+# .github/workflows/ci.yml
+on: [push, pull_request]
+jobs:
+  - lint (ESLint + Prettier)
+  - typecheck (tsc --noEmit)
+  - test-unit (Vitest)
+  - test-e2e (Playwright)
+  - deploy-staging (on PR-merge to main)
+```
+
+## Architecture Decision Records (ADRs)
+### ADR-001: TypeScript Strict-Mode
+**Decision:** Aktiviere TypeScript Strict-Mode von Tag 1  
+**Reason:** Verhindert `any`-Types, erhöht Code-Quality, weniger Bugs  
+**Alternatives:** Loose-Mode → verworfen (zu viele Bugs in Production)
+
+### ADR-002: Zustand statt Redux
+**Decision:** Zustand für State-Management  
+**Reason:** Weniger Boilerplate, performanter, einfacher für Team  
+**Alternatives:** Redux → zu komplex für MVP, Jotai → weniger Community-Support
+```
+
+**Acceptance Criteria:**
+- [ ] Ordnerstruktur entworfen + begründet
+- [ ] API-Design dokumentiert (falls Backend)
+- [ ] Data-Flow visualisiert
+- [ ] Testing-Strategie definiert
+- [ ] CI/CD-Pipeline geplant
+- [ ] Mind. 2 ADRs erstellt
+
+**Fortschritt:** Phase 2 abgeschlossen → Warte auf User-Bestätigung: "✅ Architektur OK? Weiter mit Phase 3?"
+
+---
+
+## PHASE 3: FOUNDATION SETUP (Projekt initialisieren)
+
+**Ziel:** Lauffähiges Projekt-Skeleton mit allen Tools & Configs.
+
+**Tasks:**
+1. **Projekt initialisieren:**
+   - React: `pnpm create vite@latest my-app --template react-ts`
+   - Flutter: `flutter create my_app`
+   - Django: `django-admin startproject myproject`
+
+2. **Dependencies installieren:**
+   - **Frontend (React-Beispiel):**
+     ```bash
+     pnpm add zustand react-router-dom
+     pnpm add -D tailwindcss postcss autoprefixer
+     pnpm add -D vitest @testing-library/react @testing-library/jest-dom
+     pnpm add -D playwright @playwright/test
+     pnpm add -D eslint prettier eslint-config-prettier
+     pnpm add -D husky lint-staged
+     ```
+
+3. **Config-Files erstellen:**
+   - **`tsconfig.json`:** Strict-Mode aktivieren
+   - **`tailwind.config.js`:** Mobile-First Breakpoints
+   - **`vitest.config.ts`:** Test-Setup
+   - **`playwright.config.ts`:** E2E-Setup
+   - **`.eslintrc.json`:** Linting-Rules
+   - **`.prettierrc`:** Formatting-Rules
+   - **`.env.example`:** Environment-Variables (mit Kommentaren)
+
+4. **Git-Setup:**
+   - **`.gitignore`:** node_modules, .env, dist, coverage
+   - **Husky + lint-staged:** Pre-Commit-Hooks für Lint + Tests
+   - **CHANGELOG.md:** Initial Entry
+   - **Conventional-Commits:** commitlint konfigurieren
+
+5. **Copilot-Instructions erstellen:**
+   - **`.github/copilot-instructions.md`:** Primary SoT (PRODUCT-VISION.md), Workflow, Pre-Commit-Checks
+
+6. **README.md erstellen:**
+   - **Quickstart:** 3 Commands zum Starten
+   - **Tech-Stack-Übersicht**
+   - **Project-Structure-Übersicht**
+   - **Link zu /docs/ für Details**
+
+**Output:**
+Lauffähiges Projekt mit:
+```
+✅ Dependencies installiert
+✅ Alle Config-Files erstellt
+✅ Git-Setup (Conventional Commits + Pre-Commit-Hooks)
+✅ Copilot-Instructions erstellt
+✅ README.md mit Quickstart
+✅ Projekt läuft: `pnpm run dev` (Frontend Port 5173)
+```
+
+**Test:**
+```bash
+# Installation testen
+pnpm install
+
+# Dev-Server starten
+pnpm run dev
+
+# Tests ausführen
+pnpm run test        # Unit-Tests
+pnpm run test:e2e    # E2E-Tests
+
+# Linting + Formatting
+pnpm run lint
+pnpm run format
+
+# Pre-Commit-Hook testen
+git add .
+git commit -m "feat: initial setup"  # sollte Hooks ausführen
+```
+
+**Acceptance Criteria:**
+- [ ] Projekt läuft (`pnpm run dev` startet ohne Fehler)
+- [ ] Tests laufen (`pnpm run test` grün)
+- [ ] Linting funktioniert (`pnpm run lint` grün)
+- [ ] Pre-Commit-Hooks funktionieren
+- [ ] README.md erklärt Setup in <5 Min
+
+**Fortschritt:** Phase 3 abgeschlossen → Warte auf User-Bestätigung: "✅ Setup OK? Weiter mit Phase 4 (MVP-Features)?"
+
+---
+
+## PHASE 4: CORE IMPLEMENTATION (MVP Features)
+
+**Ziel:** MVP User Stories aus Phase 1 implementieren.
+
+**Workflow pro User-Story:**
+1. **Story analysieren:** Acceptance-Criteria definieren
+2. **Tests schreiben:** TDD-Approach (Test-First)
+3. **Implementieren:** Clean Code, kommentiert
+4. **Validieren:** Tests grün, manuell testen
+5. **Dokumentieren:** Inline-Comments + User-Explanation
+
+**Beispiel: User Story 1 (Login)**
+```markdown
+**User Story:**
+Als User möchte ich mich einloggen, damit ich auf meine Daten zugreifen kann.
+
+**Acceptance Criteria:**
+- [ ] Login-Form mit Email + Passwort
+- [ ] Validierung: Email-Format, Passwort min. 8 Zeichen
+- [ ] Error-Handling: Ungültige Credentials → Fehlermeldung
+- [ ] Success: Redirect zu Dashboard + JWT gespeichert
+- [ ] Accessibility: Keyboard-Navigation, Fehler in aria-live
+
+**Implementation:**
+1. Component: `src/features/auth/LoginForm.tsx`
+2. Service: `src/services/authService.ts`
+3. Store: `src/store/authStore.ts`
+4. Tests: `src/features/auth/LoginForm.test.tsx`
+5. E2E: `tests/auth/login.spec.ts`
+```
+
+**Tasks:**
+1. **Feature 1 implementieren:**
+   - Component + Service + Store + Tests
+   - Acceptance Criteria validieren
+   - User-Explanation schreiben
+
+2. **Feature 2 implementieren:**
+   - [Analog zu Feature 1]
+
+3. **Feature 3 implementieren:**
+   - [Analog zu Feature 1]
+
+4. **Integration testen:**
+   - E2E-Test für Happy-Path (alle Features kombiniert)
+
+**Output:**
+Lauffähiges MVP mit:
+```
+✅ Feature 1 implementiert + getestet
+✅ Feature 2 implementiert + getestet
+✅ Feature 3 implementiert + getestet
+✅ E2E-Test für Happy-Path grün
+✅ Code-Coverage >70%
+✅ Inline-Comments (deutsch) für komplexe Logik
+```
+
+**Acceptance Criteria:**
+- [ ] Alle MVP User Stories implementiert
+- [ ] Alle Acceptance Criteria erfüllt
+- [ ] Tests grün (Unit + E2E)
+- [ ] Code-Coverage >70%
+- [ ] Manuell getestet (Desktop + Mobile-Viewport)
+
+**Fortschritt:** Phase 4 abgeschlossen → Warte auf User-Bestätigung: "✅ MVP fertig? Weiter mit Phase 5 (Production-Ready)?"
+
+---
+
+## PHASE 5: POLISH & HANDOVER (Production-Ready)
+
+**Ziel:** Projekt production-ready machen + Team-Onboarding vorbereiten.
+
+**Tasks:**
+1. **CONTRIBUTING.md erstellen:**
+   - Git-Workflow (Branch-Naming, Commit-Format)
+   - Code-Review-Prozess
+   - Testing-Anforderungen
+   - Deployment-Prozess
+
+2. **Deployment-Docs erstellen:**
+   - **`/docs/DEPLOYMENT.md`:**
+     - Staging-Environment (automatisch bei PR-Merge)
+     - Production-Deployment (manuell via Git-Tag)
+     - Rollback-Strategie
+     - Environment-Variables (Production)
+
+3. **Monitoring-Setup (optional für MVP):**
+   - **Error-Tracking:** Sentry-Integration
+   - **Analytics:** Plausible/Umami (Privacy-friendly)
+   - **Performance:** Web Vitals Monitoring
+
+4. **Security-Check:**
+   - **Dependencies:** `pnpm audit` (keine Critical-Vulnerabilities)
+   - **Secrets:** Keine Secrets in Git (`.env` in `.gitignore`)
+   - **HTTPS:** Enforce HTTPS (Production)
+   - **CORS:** Korrekte CORS-Config (Backend)
+
+5. **Onboarding-Docs:**
+   - **`/docs/ONBOARDING.md`:**
+     - Projekt-Setup in <30 Min
+     - Wichtigste Commands
+     - Wo finde ich was? (Ordnerstruktur-Guide)
+     - Wichtigste Docs (PRODUCT-VISION, ARCHITECTURE, CONTRIBUTING)
+
+6. **Final README-Update:**
+   - Badges (Build-Status, Coverage, Version)
+   - Demo-Link (falls deployed)
+   - Contributing-Link
+   - License
+
+**Output:**
+Production-Ready Projekt mit:
+```
+✅ CONTRIBUTING.md erstellt
+✅ DEPLOYMENT.md erstellt
+✅ Monitoring-Setup (Sentry)
+✅ Security-Check grün
+✅ ONBOARDING.md erstellt
+✅ README.md vollständig (Badges, Links)
+✅ Projekt deployed (Staging + Production)
+```
+
+**Acceptance Criteria:**
+- [ ] Alle Docs vollständig (CONTRIBUTING, DEPLOYMENT, ONBOARDING)
+- [ ] Security-Check grün (keine Critical-Vulnerabilities)
+- [ ] Monitoring-Setup funktioniert (Errors werden geloggt)
+- [ ] Projekt deployed (Staging + Production)
+- [ ] Team-Onboarding-Test: Neuer Dev kann Setup in <30 Min
+
+**Fortschritt:** Phase 5 abgeschlossen → **Projekt Production-Ready! 🎉**
+
+---
+
+## 📊 ZUSAMMENFASSUNG DES PROMPTS
+
+**Dieser Prompt liefert:**
+1. ✅ **Proaktive Vision-Discovery** (Phase 1: Was soll gebaut werden?)
+2. ✅ **Architektur-Design** (Phase 2: Wie wird es gebaut? ADRs + Struktur)
+3. ✅ **Foundation-Setup** (Phase 3: Projekt-Skeleton + Tools + Configs)
+4. ✅ **MVP-Implementation** (Phase 4: Features + Tests + Docs)
+5. ✅ **Production-Polish** (Phase 5: Deployment + Monitoring + Onboarding)
+
+**Adaptive Setup:**
+- **PWA/Web-App:** React/Vue + Vite, PWA-Manifest, Service Worker, Tailwind
+- **Flutter-App:** Flutter CLI, Riverpod, Material Design, Golden-Tests
+- **Backend-API:** Fastify/Django, OpenAPI, Rate-Limiting, Monitoring
+- **Data-Science:** Jupyter + DVC, Reproducibility, MLflow, Model-Cards
+
+**Nutzen:**
+- 🚀 **Für Greenfield-Projekte:** Strukturierte Setup in 1-2 Tagen
+- 🎯 **Für MVPs:** Schneller zu lauffähigem Produkt (keine Architektur-Chaos)
+- 🤖 **Für Copilot:** Klare Anweisungen, wie Projekt aufzubauen ist
+- 📈 **Für Teams:** Konsistente Projekt-Struktur, einfaches Onboarding
+- 🏗️ **Production-Ready:** Von Tag 1 mit Tests, CI/CD, Monitoring
+
+---
+
+## 🎯 USAGE-BEISPIELE
+
+### **Beispiel 1: React-PWA für B2C (E-Commerce)**
+```bash
+# 1. Leeres Repo erstellen
+mkdir my-shop-app && cd my-shop-app
+git init
+
+# 2. Copilot-Auftrag
+"Baue ein neues Projekt nach COPILOT-PROJECT-BUILDER-PROMPT.md"
+
+# Copilot fragt:
+- "Was ist das Hauptziel?" → "E-Commerce-Shop für Kleidung"
+- "Zielgruppe?" → "B2C, Mobile-First (70% Mobile-Traffic)"
+- "Kern-Features?" → "Produktliste, Warenkorb, Checkout, User-Account"
+- "Tech-Präferenzen?" → "TypeScript, React, Tailwind"
+
+# Copilot erstellt:
+- /docs/PRODUCT-VISION.md (E-Commerce-MVP)
+- /docs/ARCHITECTURE.md (React + Zustand + Stripe-Integration)
+- React + Vite Projekt mit Tailwind + Zustand
+- Tests (Vitest + Playwright)
+- CI/CD (GitHub Actions)
+- Deployed auf Vercel (Staging + Production)
+
+# 2 Wochen später
+✅ MVP live, 3 Features implementiert, 75% Coverage, Production-Ready! 🎉
+```
+
+### **Beispiel 2: Flutter-App für Field-Worker (Offline-First)**
+```bash
+# 1. Leeres Repo erstellen
+mkdir field-inspector-app && cd field-inspector-app
+git init
+
+# 2. Copilot-Auftrag
+"Baue ein neues Projekt nach COPILOT-PROJECT-BUILDER-PROMPT.md"
+
+# Copilot fragt:
+- "Was ist das Hauptziel?" → "Inspektions-App für Techniker vor Ort"
+- "Zielgruppe?" → "Field-Worker, Offline-First (keine Netz-Garantie)"
+- "Kern-Features?" → "Inspektions-Checkliste, Foto-Upload, Offline-Sync"
+- "Tech-Präferenzen?" → "Flutter (iOS + Android), Offline-Support"
+
+# Copilot erstellt:
+- /docs/PRODUCT-VISION.md (Field-Worker-App)
+- /docs/ARCHITECTURE.md (Flutter + Riverpod + SQLite + Sync-Queue)
+- Flutter-Projekt mit Riverpod + sqflite
+- Offline-First-Architektur (IndexedDB-Alternative für Flutter)
+- Material Design Theme (Handschuh-freundlich)
+- Tests (Widget-Tests + Golden-Tests)
+
+# 3 Wochen später
+✅ App deployed (TestFlight + Google Play Internal), Offline-Sync funktioniert! 🎉
+```
+
+### **Beispiel 3: Django-Backend-API (B2B SaaS)**
+```bash
+# 1. Leeres Repo erstellen
+mkdir crm-api && cd crm-api
+git init
+
+# 2. Copilot-Auftrag
+"Baue ein neues Projekt nach COPILOT-PROJECT-BUILDER-PROMPT.md"
+
+# Copilot fragt:
+- "Was ist das Hauptziel?" → "CRM-Backend-API für B2B-Kunden"
+- "Zielgruppe?" → "B2B, Multi-Tenant, High-Security"
+- "Kern-Features?" → "User-Management, Contact-Management, API-Keys"
+- "Tech-Präferenzen?" → "Python, Django, PostgreSQL, REST-API"
+
+# Copilot erstellt:
+- /docs/PRODUCT-VISION.md (B2B-CRM-API)
+- /docs/ARCHITECTURE.md (Django + DRF + PostgreSQL + JWT + OpenAPI)
+- Django-Projekt mit Django-REST-Framework
+- Multi-Tenant-Architektur
+- OpenAPI-Docs (Swagger-UI)
+- Tests (Pytest + Coverage >80%)
+- CI/CD (GitHub Actions + Docker)
+
+# 2 Wochen später
+✅ API deployed (Railway), OpenAPI-Docs live, First Customer onboarded! 🎉
+```
+
+---
+
+## 🔧 PROJEKT-TYP-SPEZIFISCHE TEMPLATES
+
+### **React-PWA (Web-App)**
+```markdown
+**Tech-Stack:**
+- React 18 + TypeScript 5 + Vite 5
+- Zustand 5 (State-Management)
+- Tailwind CSS 3 (Styling)
+- React-Router 6 (Routing)
+- Vitest + Playwright (Testing)
+
+**Struktur:**
+/src/features/ (Feature-based Modules)
+/src/components/ (Shared UI-Components)
+/src/services/ (API-Calls)
+
+**Besonderheiten:**
+- PWA-Manifest (installierbar)
+- Service Worker (Offline-Support)
+- Core Web Vitals Monitoring
+```
+
+### **Flutter-App (Mobile Native)**
+```markdown
+**Tech-Stack:**
+- Flutter 3.x + Dart 3.x
+- Riverpod / Bloc (State-Management)
+- sqflite (Local-DB)
+- go_router (Navigation)
+- flutter_test + Golden-Tests
+
+**Struktur:**
+/lib/features/ (Feature-based Modules)
+/lib/core/ (Shared Code)
+/lib/models/ (Data-Models)
+
+**Besonderheiten:**
+- Material Design Theme (anpassbar)
+- Offline-First-Architektur
+- Platform-specific Code (iOS/Android)
+```
+
+### **Django-Backend (REST-API)**
+```markdown
+**Tech-Stack:**
+- Django 5.x + Python 3.11+
+- Django-REST-Framework (API)
+- PostgreSQL 16 (Database)
+- Celery (Background-Tasks)
+- Pytest + Coverage
+
+**Struktur:**
+/apps/ (Django-Apps pro Feature)
+/api/ (API-Endpoints)
+/core/ (Shared Code)
+
+**Besonderheiten:**
+- OpenAPI-Docs (drf-spectacular)
+- JWT-Authentication
+- Rate-Limiting
+- Admin-Panel
+```
+
+---
+
+## 📚 REFERENZEN
+
+**Methodischer Benchmark:**
+- 360Volt-docu-MVP (Dokumentations-Standards & Workflow-Prinzipien)
+- **Hinweis:** Tech-Stack ist NICHT universell – wird projektabhängig ermittelt
+
+**Best-Practice-Quellen:**
+- **Universal:** Clean Architecture, TDD, Conventional Commits, 12-Factor-App
+- **React:** React-Docs, Vite-Guide, Zustand-Best-Practices
+- **Flutter:** Flutter-Docs, Material Design Guidelines, Riverpod-Guide
+- **Django:** Django-Docs, DRF-Best-Practices, OWASP Top 10
+
+**Tools:**
+- **Git:** Conventional Commits, Husky, lint-staged
+- **Testing:** Vitest, Playwright, Pytest, flutter_test
+- **CI/CD:** GitHub Actions, GitLab CI
+- **Deployment:** Vercel, Netlify, Railway, Heroku, App-Stores
+
+---
+
+## ✅ CHANGELOG
+
+**v1.0 (21.10.2025):**
+- Initial Release für Greenfield-Projekte
+- 5 Phasen: Vision Discovery → Architecture Design → Foundation Setup → Core Implementation → Polish & Handover
+- Adaptive Setup für PWA, Flutter, Django
+- Proaktive Vision-Discovery mit gezielten Rückfragen
+- Production-Ready von Tag 1 (Tests, CI/CD, Monitoring)
+
+**Maintainer:** GitHub Copilot  
+**Review:** M. Sieger (360Volt)  
+**Next Review:** Nach 5 Projekt-Durchläufen (Feedback-Integration)
+
+---
+
+## 🚀 QUICK START
+
+**Für User:**
+```bash
+# 1. Leeres Repo erstellen
+mkdir my-new-project && cd my-new-project
+git init
+
+# 2. Copilot-Prompt kopieren
+curl -o docs/COPILOT-PROJECT-BUILDER-PROMPT.md https://...
+
+# 3. Öffne in VSCode/Codespaces
+
+# 4. Sage zu Copilot:
+"Baue ein neues Projekt nach COPILOT-PROJECT-BUILDER-PROMPT.md"
+
+# 5. Beantworte Copilots Rückfragen
+# 6. Copilot führt Phase 1-5 aus → Production-Ready Projekt!
+```
+
+**Für Copilot:**
+```
+WENN User sagt: "Baue ein neues Projekt nach COPILOT-PROJECT-BUILDER-PROMPT.md"
+DANN:
+1. Lese diese Datei vollständig
+2. Starte mit Phase 1 (Vision Discovery) – stelle gezielte Rückfragen
+3. Erstelle /docs/PRODUCT-VISION.md basierend auf User-Antworten
+4. Frage User: "✅ Tech-Stack OK? Weiter mit Phase 2?"
+5. Fahre fort mit Phase 2-5 (Architecture, Setup, Implementation, Polish)
+6. Nach jedem Task: User-Explanation (2-3 Sätze)
+7. Nach Phase 5: "🎉 Projekt Production-Ready! Deployed auf [URL]"
+```
+
+---
+
+**Ende des Prompts** 🎯
