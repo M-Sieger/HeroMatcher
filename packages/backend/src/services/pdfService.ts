@@ -83,8 +83,16 @@ export function extractPositions(text: string): ParsedPosition[] {
   let currentPosition: Partial<ParsedPosition> | null = null;
 
   for (const line of lines) {
-    // Erkennung von nummerierten Positionen (z.B. "Position 1:", "Pos. 1:", "1. Installationskomponenten")
-    const positionMatch = line.match(/^(?:Position|Pos.?)\s*(\d+)[.:]\s*(.+)|^(\d+)[.:]\s*(.+)/i);
+    // Ignoriere Summen-Zeilen (z.B. "Summe 1 Beratung, Planung & Service")
+    if (/^Summe\s+\d+/i.test(line)) {
+      continue;
+    }
+
+    // Erkennung von nummerierten Positionen
+    // Unterstützt: "Position 1:", "Pos. 1.002:", "1. Beschreibung", "2.001 Beschreibung"
+    const positionMatch = line.match(
+      /^(?:Position|Pos.?)\s*(\d+(?:\.\d+)?)[.:]\s*(.+)|^(\d+(?:\.\d+)?)[.:]\s*(.+)/i
+    );
     if (positionMatch) {
       // Speichere vorherige Position
       if (currentPosition?.description) {
@@ -101,21 +109,32 @@ export function extractPositions(text: string): ParsedPosition[] {
     }
 
     // Mengen-Erkennung (erweitert)
-    const quantityMatch = line.match(/(?:Menge|Anzahl):\s*(\d+(?:[.,]\d+)?)\s*(\w+)?/i);
+    // Unterstützt: "Menge: 50 m³", "1x 1.381,00 €", "1 pauschal"
+    const quantityMatch = line.match(
+      /(?:Menge|Anzahl):\s*(\d+(?:[.,]\d+)?)\s*(\w+)?|^(\d+)x\s+|^(\d+)\s+(pauschal)/i
+    );
     if (quantityMatch && currentPosition) {
-      currentPosition.quantity = quantityMatch[1];
-      currentPosition.unit = quantityMatch[2] || '';
+      currentPosition.quantity = quantityMatch[1] || quantityMatch[3] || quantityMatch[4] || '1';
+      currentPosition.unit = quantityMatch[2] || quantityMatch[5] || '';
       continue;
     }
 
     // Preis-Erkennung (erweitert)
-    const priceMatch = line.match(/(?:Preis|EP|GP|Gesamt):\s*([\d.,]+)\s*(?:EUR|€)?/i);
+    const priceMatch = line.match(
+      /(?:Preis|EP|GP|Gesamt):\s*([\d.,]+)\s*(?:EUR|€)?|(\d+)x\s+([\d.,]+)\s*€/i
+    );
     if (priceMatch && currentPosition) {
-      currentPosition.price = priceMatch[1];
+      currentPosition.price = priceMatch[1] || priceMatch[3];
       continue;
     }
 
-    // Falls es eine Fortsetzung der Beschreibung ist
+    // Ignoriere Bullet-Points und "Ihre Vorteile" Sektionen
+    if (/^[•·-]\s+/.test(line) || /^Ihre Vorteile:/i.test(line)) {
+      // Füge als Beschreibungs-Detail hinzu (optional)
+      continue;
+    }
+
+    // Falls es eine Fortsetzung der Beschreibung ist (keine neue Position, Menge oder Preis)
     if (currentPosition && !currentPosition.quantity && !currentPosition.price) {
       currentPosition.description += ' ' + line;
     }
