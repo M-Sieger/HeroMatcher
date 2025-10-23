@@ -23,7 +23,13 @@ Welche Positionen/Leistungen aus dem unterschriebenen Angebot in der Hero-Vorlag
 Welche Positionen/Leistungen aus dem unterschriebenen Angebot in der Hero-Vorlage fehlen
 Welche Positionen in der Hero-Vorlage angepasst werden müssen (Menge, Preis)
 
-## Anforderungen & Fallback-Strategie
+## Anforderungen & Entwicklungs-Philosophie
+
+**Aktuelles Ziel: Internes MVP für schnelle Arbeitserleichterung**
+
+- **Priorität:** Schnell etwas bauen, das JETZT die Arbeit erleichtert
+- **Zielgruppe:** Erstmal intern für eigene Arbeit
+- **Zeithorizont:** Sofort nutzbar > Perfekt in ferner Zukunft
 
 **MVP-Ansatz (Light-Automatisierung):**
 
@@ -34,10 +40,17 @@ Welche Positionen in der Hero-Vorlage angepasst werden müssen (Menge, Preis)
 **Wichtig:**
 
 - Selbst ein "light"-Vergleich (Bezeichnung + Preis + Menge) ist bereits eine große Errungenschaft
-- Perfekte Automatisierung ist nicht das Ziel - Unterstützung des manuellen Prozesses ist ausreichend
-- Bei zu hoher Komplexität: Fokus auf diese Light-Automatisierung als valide Lösung
+- **Perfekte Automatisierung ist NICHT das aktuelle Ziel** (in ferner Zukunft eventuell, aber nicht jetzt)
+- Fokus auf pragmatische Lösung, die sofort Mehrwert bringt
+- Bei zu hoher Komplexität: Lieber einfache, funktionierende Lösung als komplexe, halbfertige
+
+**Entwicklungs-Strategie:**
+
+1. **Phase 1:** Internes Tool für eigene Arbeit (JETZT)
+2. **Phase 2:** Optimierungen basierend auf echten Nutzungserfahrungen
+3. **Phase 3:** Evtl. später perfekte Automatisierung (ferne Zukunft)
 
 **Fallback im Hinterkopf behalten:**
-Falls erweiterte Features (OCR-Perfektion, komplexe Fuzzy-Matching, etc.) zu komplex werden, ist die Light-Version mit manueller Nachbearbeitung ein vollwertiges Produkt.
+Falls erweiterte Features (OCR-Perfektion, komplexe Fuzzy-Matching, etc.) zu komplex werden, ist die Light-Version mit manueller Nachbearbeitung ein vollwertiges, nutzbares Produkt.
 
 How can I help you?
