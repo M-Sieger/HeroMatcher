@@ -3,11 +3,6 @@ import { Box, Typography, Button, Paper, Grid, Alert, CircularProgress } from '@
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
 
-interface UploadedFile {
-  name: string;
-  type: string;
-}
-
 export default function ComparePage() {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [heroFile, setHeroFile] = useState<File | null>(null);
