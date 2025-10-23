@@ -63,8 +63,16 @@ router.post(
       // Parse Hero file and convert to text array
       const heroDocument = await parseHeroFile(heroFile.path);
       const heroTextArray = heroPositionsToTextArray(heroDocument);
-      const heroText = heroTextArray.join('\n');
-      console.log(`Parsed ${heroDocument.positions.length} positions from Hero file`);
+
+      // Fallback: Verwende Raw-Text wenn keine Positionen extrahiert wurden
+      const heroText =
+        heroTextArray.length > 0
+          ? heroTextArray.join('\n')
+          : await extractTextFromPDF(heroFile.path);
+
+      console.log(
+        `Parsed ${heroDocument.positions.length} positions from Hero file (using ${heroTextArray.length > 0 ? 'structured' : 'raw'} text)`
+      );
 
       // Compare documents with intelligent fuzzy matching
       const comparisonResult = compareDocuments(pdfText, heroText);

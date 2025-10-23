@@ -19,13 +19,44 @@ interface BestMatch {
   hero: string;
 }
 
+export interface ComparisonOptions {
+  matchThreshold?: number; // Default: 0.90 (gesenkt von 0.95 für mehr Flexibilität)
+  similarThreshold?: number; // Default: 0.60
+  useSynonyms?: boolean; // Default: true
+  compareNumericValues?: boolean; // Default: true
+}
+
+/**
+ * Synonym-Mapping für typische Baugewerbe-Begriffe
+ */
+const SYNONYMS: Record<string, string[]> = {
+  erdarbeiten: ['aushub', 'erdbewegung', 'bodenaushub'],
+  fundamentarbeiten: ['fundamente', 'fundamentierung', 'bodenplatte'],
+  mauerarbeiten: ['mauerwerk', 'maurerarbeiten', 'mauern'],
+  dacheindeckung: ['dachdecker', 'dachdeckung', 'bedachung'],
+  installationskomponenten: ['installation', 'installationen', 'montage'],
+  elektroinstallation: ['elektrik', 'elektroarbeiten', 'elektronik'],
+  sanitärinstallation: ['sanitär', 'sanitärarbeiten', 'haustechnik'],
+};
+
 /**
  * Vergleicht zwei Dokumente intelligent mit Fuzzy-Matching
  * @param pdfText - Extrahierter Text aus PDF
  * @param heroText - Text aus Hero-Vorlage
  * @returns Detailliertes Vergleichsergebnis
  */
-export function compareDocuments(pdfText: string, heroText: string): ComparisonResult {
+export function compareDocuments(
+  pdfText: string,
+  heroText: string,
+  options: ComparisonOptions = {}
+): ComparisonResult {
+  const {
+    matchThreshold = 0.9,
+    similarThreshold = 0.6,
+    useSynonyms = true,
+    compareNumericValues = true,
+  } = options;
+
   const pdfLines = pdfText.split('\n').filter(line => line.trim().length > 0);
   const heroLines = heroText.split('\n').filter(line => line.trim().length > 0);
 
@@ -45,7 +76,19 @@ export function compareDocuments(pdfText: string, heroText: string): ComparisonR
       if (usedHeroIndices.has(index)) continue;
 
       const heroLine = heroLines[index];
-      const similarity = calculateAdvancedSimilarity(pdfLine, heroLine);
+      let similarity = calculateAdvancedSimilarity(pdfLine, heroLine);
+
+      // Synonym-Boost
+      if (useSynonyms) {
+        const synonymBoost = calculateSynonymBoost(pdfLine, heroLine);
+        similarity = Math.min(1.0, similarity + synonymBoost);
+      }
+
+      // Numerischer Vergleich (Mengen, Preise)
+      if (compareNumericValues) {
+        const numericBoost = compareNumericFields(pdfLine, heroLine);
+        similarity = Math.min(1.0, similarity + numericBoost);
+      }
 
       if (!bestMatch || similarity > bestMatch.similarity) {
         bestMatch = { index, similarity, hero: heroLine };
@@ -53,7 +96,7 @@ export function compareDocuments(pdfText: string, heroText: string): ComparisonR
     }
 
     if (bestMatch) {
-      if (bestMatch.similarity >= 0.95) {
+      if (bestMatch.similarity >= matchThreshold) {
         // Exakte oder sehr hohe Übereinstimmung
         matches.push({
           pdf: pdfLine,
@@ -61,7 +104,7 @@ export function compareDocuments(pdfText: string, heroText: string): ComparisonR
           confidence: Math.round(bestMatch.similarity * 100),
         });
         usedHeroIndices.add(bestMatch.index);
-      } else if (bestMatch.similarity >= 0.6) {
+      } else if (bestMatch.similarity >= similarThreshold) {
         // Ähnliche Übereinstimmung (Fuzzy-Match)
         similar.push({
           pdf: pdfLine,
@@ -199,4 +242,71 @@ function getEditDistance(str1: string, str2: string): number {
   }
 
   return matrix[str2.length][str1.length];
+}
+
+/**
+ * Berechnet Synonym-Boost für ähnliche Begriffe
+ */
+function calculateSynonymBoost(str1: string, str2: string): number {
+  const s1 = str1.toLowerCase();
+  const s2 = str2.toLowerCase();
+
+  for (const [key, synonyms] of Object.entries(SYNONYMS)) {
+    const hasSynonymInStr1 = synonyms.some(syn => s1.includes(syn)) || s1.includes(key);
+    const hasSynonymInStr2 = synonyms.some(syn => s2.includes(syn)) || s2.includes(key);
+
+    if (hasSynonymInStr1 && hasSynonymInStr2) {
+      return 0.15; // 15% Bonus für Synonym-Match
+    }
+  }
+
+  return 0;
+}
+
+/**
+ * Vergleicht numerische Felder (Mengen, Preise)
+ */
+function compareNumericFields(str1: string, str2: string): number {
+  const numbers1 = extractNumbers(str1);
+  const numbers2 = extractNumbers(str2);
+
+  if (numbers1.length === 0 || numbers2.length === 0) {
+    return 0;
+  }
+
+  // Zähle übereinstimmende Zahlen
+  let matches = 0;
+  const used = new Set<number>();
+
+  for (const num1 of numbers1) {
+    for (let i = 0; i < numbers2.length; i++) {
+      if (used.has(i)) continue;
+      const num2 = numbers2[i];
+
+      // Exakte Übereinstimmung oder sehr nah (±1%)
+      if (Math.abs(num1 - num2) < num1 * 0.01) {
+        matches++;
+        used.add(i);
+        break;
+      }
+    }
+  }
+
+  const totalNumbers = Math.max(numbers1.length, numbers2.length);
+  const matchRatio = matches / totalNumbers;
+
+  return matchRatio > 0.5 ? 0.1 : 0; // 10% Bonus wenn >50% Zahlen übereinstimmen
+}
+
+/**
+ * Extrahiert alle Zahlen aus einem String
+ */
+function extractNumbers(str: string): number[] {
+  const matches = str.match(/\d+(?:[.,]\d+)?/g);
+  if (!matches) return [];
+
+  return matches.map(match => {
+    const normalized = match.replace(',', '.');
+    return parseFloat(normalized);
+  });
 }
