@@ -17,12 +17,28 @@ export interface HeroDocument {
 
 /**
  * Parst eine Hero-Vorlage und extrahiert strukturierte Daten
- * @param filePath - Pfad zur Hero-Datei
+ * @param filePath - Pfad zur Hero-Datei (TXT, PDF, PNG, JPG)
  * @returns Strukturiertes HeroDocument
  */
 export async function parseHeroFile(filePath: string): Promise<HeroDocument> {
   try {
-    const content = await fs.readFile(filePath, 'utf-8');
+    // Import pdfService dynamisch um Circular Dependencies zu vermeiden
+    const path = await import('path');
+    const ext = path.extname(filePath).toLowerCase();
+
+    let content: string;
+
+    // Wenn es eine PDF/Bild ist, verwende OCR
+    if (['.pdf', '.png', '.jpg', '.jpeg'].includes(ext)) {
+      console.log(`🔍 Hero file is ${ext}, using OCR extraction...`);
+      const { extractTextFromPDF } = await import('./pdfService.js');
+      content = await extractTextFromPDF(filePath);
+    } else {
+      // Sonst als Text einlesen
+      console.log(`📄 Reading Hero file as text...`);
+      content = await fs.readFile(filePath, 'utf-8');
+    }
+
     return parseHeroContent(content);
   } catch (error) {
     console.error('Hero file parsing error:', error);
