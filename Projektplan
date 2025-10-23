@@ -1,0 +1,189 @@
+Hier ist dein **Projektplan** sauber als **Markdown** formatiert:
+
+````markdown
+# 🧩 Projektplan: Angebotsvergleich-Webapp
+
+## 1. Projekt-Überblick
+
+**Projektname:** Angebots-Matcher  
+**Ziel:** Automatisierung des Vergleichs zwischen unterschriebenen Angeboten und Hero-Vorlagen  
+**Zeitrahmen:** 12 Wochen (3 Sprints)  
+**Entwicklungsmethodik:** Agile / Scrum (2-Wochen-Sprints)
+
+---
+
+## 2. Produktvision & Roadmap
+
+### 🎯 Vision
+Eine intuitive Webanwendung, die Mitarbeitern Zeit spart durch automatisierten Vergleich von Kundenangeboten mit Hero-Vorlagen und klare Visualisierung von Unterschieden.
+
+### 🗺️ Release-Plan
+
+**MVP (Release 1.0) – Ende Sprint 3**
+- Dokumenten-Upload (PDF + Hero-Export)
+- OCR-Textextraktion aus unterschriebenen Angeboten
+- Grundlegende Vergleichsfunktionen
+- Visualisierung von Übereinstimmungen und Unterschieden
+
+**Release 2.0 – Ende Sprint 6**
+- Erweiterte Matching-Algorithmen (Fuzzy-Matching)
+- Benutzerbasierte Zuordnungen speichern
+- Exportfunktion für Vergleichsergebnisse
+
+**Release 3.0 – Ende Sprint 9**
+- Integration mit Hero-System über APIs (wenn verfügbar)
+- Stapelverarbeitung mehrerer Dokumente
+- Benutzerverwaltung und Zugriffsrechte
+
+---
+
+## 3. Sprint-Planung
+
+### Sprint 1 – Grundfunktionalitäten
+- **User Story:** Als Benutzer kann ich PDFs hochladen  
+- **User Story:** Als Benutzer kann ich Hero-Vorlagen importieren  
+- **User Story:** Als Benutzer sehe ich eine einfache Vorschau beider Dokumente  
+
+### Sprint 2 – OCR & Datenverarbeitung
+- **User Story:** Als Benutzer kann ich Text aus PDFs extrahieren  
+- **User Story:** Als Benutzer kann ich Daten aus Hero strukturieren  
+- **User Story:** Als System vergleiche ich einfache Textübereinstimmungen  
+
+### Sprint 3 – Benutzeroberfläche & MVP-Abschluss
+- **User Story:** Als Benutzer sehe ich Übereinstimmungen farblich markiert  
+- **User Story:** Als Benutzer sehe ich fehlende Positionen in separaten Listen  
+- **User Story:** Als Benutzer erhalte ich einen Überblick über erforderliche Anpassungen  
+
+---
+
+## 4. Technische Architektur
+
+### 🖥️ Frontend
+- Framework: **React.js** mit **TypeScript**  
+- UI-Komponenten: **Material-UI** oder **Tailwind CSS**  
+- Zustandsmanagement: **Context API** oder **Redux**  
+- PDF-Handling: **PDF.js** für Rendering und Vorschau  
+
+### ⚙️ Backend
+- Server: **Node.js** mit **Express**  
+- OCR-Integration: **Tesseract.js**  
+- Vergleichsalgorithmen: Eigene Implementierung + **Levenshtein-Distanz**  
+- API-Struktur: **RESTful** mit JSON-Responses  
+
+### ☁️ Infrastruktur
+- Entwicklung: **GitHub Codespaces**  
+- CI/CD: **GitHub Actions**  
+- Hosting: **Vercel** oder **Netlify** (Frontend), **Heroku** (Backend)  
+- Datenspeicherung: Lokale Dateispeicherung → später **MongoDB**  
+
+---
+
+## 5. Datenbankschema
+
+### 📄 Dokumente
+| Feld | Typ | Beschreibung |
+|------|-----|---------------|
+| id | UUID | Eindeutige ID |
+| name | String | Dateiname |
+| typ | Enum(ANGEBOT_PDF, HERO_TEMPLATE) | Dokumenttyp |
+| uploadDatum | Date | Upload-Zeitpunkt |
+| status | Enum(UPLOADED, PROCESSED, COMPARED) | Verarbeitungsstatus |
+| inhaltExtrahiert | JSON | Extrahierter Textinhalt |
+
+### ⚖️ Vergleiche
+| Feld | Typ | Beschreibung |
+|------|-----|---------------|
+| id | UUID | Vergleichs-ID |
+| angebotId | UUID | Referenz auf Angebot |
+| vorlagenId | UUID | Referenz auf Vorlage |
+| erstellungsDatum | Date | Zeitpunkt der Erstellung |
+| ergebnisse | JSON | Vergleichsdaten |
+
+```json
+{
+  "übereinstimmungen": [],
+  "ähnlichkeiten": [],
+  "fehlend": [],
+  "zusätzlich": []
+}
+````
+
+---
+
+## 6. Implementierungsstrategie
+
+### Phase 1: Grundgerüst
+
+* Projekt-Setup mit React, Express und TypeScript
+* Grundlegende UI-Komponenten
+* Dokument-Upload-Funktionalität
+
+### Phase 2: Kernfunktionen
+
+* OCR-Implementierung
+* Textextraktion und -strukturierung
+* Vergleichsalgorithmen für exakte Übereinstimmungen
+
+### Phase 3: UI-Erweiterung
+
+* Detaillierte Ergebnisanzeige
+* Interaktive Zuordnungsfunktionen
+* Responsive Design für verschiedene Geräte
+
+---
+
+## 7. Teststrategie
+
+### 🧪 Unit-Tests
+
+* Framework: **Jest**
+* Abdeckung: 80 % der Kernfunktionen
+
+### 🔗 Integrationstests
+
+* API-Tests mit **Supertest**
+* Frontend-Integration mit **React Testing Library**
+
+### ✅ Akzeptanztests
+
+* **Cypress** für E2E-Tests
+* Fokus auf kritische Benutzerpfade:
+
+  * Upload & OCR-Verarbeitung
+  * Dokumentenvergleich
+  * Benutzerinteraktion mit Ergebnissen
+
+---
+
+## 8. Definition of Done ✅
+
+Eine User Story gilt als abgeschlossen, wenn:
+
+1. Code geschrieben und peer-reviewed ist
+2. Automatisierte Tests bestanden wurden
+3. Dokumentation aktualisiert wurde
+4. Feature in der Entwicklungsumgebung demonstrierbar ist
+5. Product Owner die Akzeptanzkriterien bestätigt hat
+
+---
+
+## 9. Risikomanagement
+
+| Risiko            | Beschreibung                  | Mitigation                                             |
+| ----------------- | ----------------------------- | ------------------------------------------------------ |
+| OCR-Genauigkeit   | Probleme bei komplexen PDFs   | Evaluierung mehrerer OCR-Bibliotheken, Vorverarbeitung |
+| Performance       | Verarbeitung großer Dokumente | Chunking-Strategie, asynchrone Verarbeitung            |
+| Benutzerakzeptanz | Mögliche UI-Überforderung     | Frühe Usability-Tests, iterative Verbesserung          |
+
+---
+
+## 10. Metriken & KPIs 📊
+
+**Entwicklung:** Velocity, Burndown-Chart, Code-Coverage
+**Produkt:** Verarbeitungszeit pro Dokument, Matching-Genauigkeit, Benutzerinteraktionen
+**Business:** Zeitersparnis gegenüber manuellem Prozess, Fehlerreduktion
+
+---
+
+```
+
