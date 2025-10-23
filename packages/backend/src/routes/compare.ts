@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { extractTextFromPDF } from '../services/pdfService.js';
+import { parseHeroFile, heroPositionsToTextArray } from '../services/heroService.js';
 import { compareDocuments } from '../services/comparisonService.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -46,13 +47,22 @@ router.post(
       const pdfFile = files.pdfFile[0];
       const heroFile = files.heroFile[0];
 
-      // Extract text from PDF
+      console.log('Processing files:', {
+        pdf: pdfFile.originalname,
+        hero: heroFile.originalname,
+      });
+
+      // Extract text from PDF using OCR
       const pdfText = await extractTextFromPDF(pdfFile.path);
+      console.log(`Extracted ${pdfText.length} characters from PDF`);
 
-      // TODO: Parse Hero file (currently reading as text)
-      const heroText = ''; // This will be implemented based on Hero file format
+      // Parse Hero file and convert to text array
+      const heroDocument = await parseHeroFile(heroFile.path);
+      const heroTextArray = heroPositionsToTextArray(heroDocument);
+      const heroText = heroTextArray.join('\n');
+      console.log(`Parsed ${heroDocument.positions.length} positions from Hero file`);
 
-      // Compare documents
+      // Compare documents with intelligent fuzzy matching
       const comparisonResult = compareDocuments(pdfText, heroText);
 
       res.json({
@@ -61,6 +71,11 @@ router.post(
         files: {
           pdf: pdfFile.originalname,
           hero: heroFile.originalname,
+        },
+        heroDocument: {
+          title: heroDocument.title,
+          positionsCount: heroDocument.positions.length,
+          totalAmount: heroDocument.totalAmount,
         },
       });
     } catch (error) {

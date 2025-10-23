@@ -1,0 +1,24 @@
+ANGEBOT
+Projekt: Neubau Einfamilienhaus
+
+Pos. 1: Erdarbeiten
+Menge: 50 m³
+EP: 35,00 €/m³
+GP: 1.750,00 €
+
+Pos. 2: Fundamentarbeiten
+Menge: 20 m³
+EP: 120,00 €/m³
+GP: 2.400,00 €
+
+Pos. 3: Mauerarbeiten
+Menge: 150 m²
+EP: 85,00 €/m²
+GP: 12.750,00 €
+
+Pos. 4: Dacheindeckung
+Menge: 80 m²
+EP: 95,00 €/m²
+GP: 7.600,00 €
+
+Gesamtsumme: 24.500,00 €
