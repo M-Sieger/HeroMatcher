@@ -1,4 +1,4 @@
- Kundenangebot vs. Hero-Vorlage ## Kontext - Ich
+Kundenangebot vs. Hero-Vorlage ## Kontext - Ich
 Angebotsdokumenten-Vergleich: Kundenangebot vs. Hero-Vorlage
 Kontext
 Ich arbeite mit zwei verschiedenen Angebotsdokumenten:
@@ -22,5 +22,22 @@ Eine Automatisierung, die anzeigt:
 Welche Positionen/Leistungen aus dem unterschriebenen Angebot in der Hero-Vorlage vorhanden sind
 Welche Positionen/Leistungen aus dem unterschriebenen Angebot in der Hero-Vorlage fehlen
 Welche Positionen in der Hero-Vorlage angepasst werden müssen (Menge, Preis)
-How can I help you?
 
+## Anforderungen & Fallback-Strategie
+
+**MVP-Ansatz (Light-Automatisierung):**
+
+- **Kern-Funktionalität:** Vergleich von Positionsbezeichnung + Preis (ggf. mit Menge)
+- **Manuelle Nacharbeit:** Ist akzeptabel und erwünscht, da sowieso manueller Abgleich und Einfügen erforderlich ist
+- **Vorteil:** Deutliche Zeitersparnis gegenüber komplett manuellem Vergleich
+
+**Wichtig:**
+
+- Selbst ein "light"-Vergleich (Bezeichnung + Preis + Menge) ist bereits eine große Errungenschaft
+- Perfekte Automatisierung ist nicht das Ziel - Unterstützung des manuellen Prozesses ist ausreichend
+- Bei zu hoher Komplexität: Fokus auf diese Light-Automatisierung als valide Lösung
+
+**Fallback im Hinterkopf behalten:**
+Falls erweiterte Features (OCR-Perfektion, komplexe Fuzzy-Matching, etc.) zu komplex werden, ist die Light-Version mit manueller Nachbearbeitung ein vollwertiges Produkt.
+
+How can I help you?
