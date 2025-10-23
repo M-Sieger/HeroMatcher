@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { extractTextFromPDF } from '../services/pdfService.js';
+import { extractTextFromPDF, extractPositionsAdvanced } from '../services/pdfService.js';
 import { parseHeroFile, heroPositionsToTextArray } from '../services/heroService.js';
 import { compareDocuments } from '../services/comparisonService.js';
 
@@ -56,6 +56,10 @@ router.post(
       const pdfText = await extractTextFromPDF(pdfFile.path);
       console.log(`Extracted ${pdfText.length} characters from PDF`);
 
+      // Extract structured positions with advanced table detection
+      const pdfPositions = extractPositionsAdvanced(pdfText);
+      console.log(`📊 Extracted ${pdfPositions.length} structured positions from PDF`);
+
       // Parse Hero file and convert to text array
       const heroDocument = await parseHeroFile(heroFile.path);
       const heroTextArray = heroPositionsToTextArray(heroDocument);
@@ -71,6 +75,10 @@ router.post(
         files: {
           pdf: pdfFile.originalname,
           hero: heroFile.originalname,
+        },
+        pdfDocument: {
+          positionsCount: pdfPositions.length,
+          positions: pdfPositions,
         },
         heroDocument: {
           title: heroDocument.title,

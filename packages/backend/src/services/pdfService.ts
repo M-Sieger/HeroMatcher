@@ -83,34 +83,41 @@ export function extractPositions(text: string): ParsedPosition[] {
   let currentPosition: Partial<ParsedPosition> | null = null;
 
   for (const line of lines) {
-    // Erkennung von nummerierten Positionen (z.B. "1. Installationskomponenten")
-    const positionMatch = line.match(/^(\d+)\.\s*(.+)/);
+    // Erkennung von nummerierten Positionen (z.B. "Position 1:", "Pos. 1:", "1. Installationskomponenten")
+    const positionMatch = line.match(/^(?:Position|Pos.?)\s*(\d+)[.:]\s*(.+)|^(\d+)[.:]\s*(.+)/i);
     if (positionMatch) {
       // Speichere vorherige Position
       if (currentPosition?.description) {
         positions.push(currentPosition as ParsedPosition);
       }
-      // Starte neue Position
+      // Starte neue Position - Handle beide Regex-Gruppen
+      const number = positionMatch[1] || positionMatch[3];
+      const description = positionMatch[2] || positionMatch[4];
       currentPosition = {
-        number: positionMatch[1],
-        description: positionMatch[2],
+        number,
+        description,
       };
       continue;
     }
 
-    // Mengen-Erkennung
-    const quantityMatch = line.match(/Menge:\s*(\d+(?:[.,]\d+)?)\s*(\w+)?/i);
+    // Mengen-Erkennung (erweitert)
+    const quantityMatch = line.match(/(?:Menge|Anzahl):\s*(\d+(?:[.,]\d+)?)\s*(\w+)?/i);
     if (quantityMatch && currentPosition) {
       currentPosition.quantity = quantityMatch[1];
       currentPosition.unit = quantityMatch[2] || '';
       continue;
     }
 
-    // Preis-Erkennung
-    const priceMatch = line.match(/Preis:\s*([\d.,]+)\s*(?:EUR|€)?/i);
+    // Preis-Erkennung (erweitert)
+    const priceMatch = line.match(/(?:Preis|EP|GP|Gesamt):\s*([\d.,]+)\s*(?:EUR|€)?/i);
     if (priceMatch && currentPosition) {
       currentPosition.price = priceMatch[1];
       continue;
+    }
+
+    // Falls es eine Fortsetzung der Beschreibung ist
+    if (currentPosition && !currentPosition.quantity && !currentPosition.price) {
+      currentPosition.description += ' ' + line;
     }
   }
 
@@ -120,4 +127,117 @@ export function extractPositions(text: string): ParsedPosition[] {
   }
 
   return positions;
+}
+
+/**
+ * Erkennt tabellarische Strukturen im Text
+ * Nutzt Layout-Analyse basierend auf Whitespace und Alignment
+ */
+export interface TableCell {
+  content: string;
+  column: number;
+}
+
+export interface TableRow {
+  cells: TableCell[];
+  isHeader: boolean;
+}
+
+export function detectTableStructure(text: string): TableRow[] {
+  const lines = text.split('\n').filter(line => line.trim().length > 0);
+  const rows: TableRow[] = [];
+
+  for (const line of lines) {
+    // Erkenne Zeilen mit mehreren Spalten (durch mehrere Leerzeichen getrennt)
+    // Beispiel: "Pos. 1    Erdarbeiten    50 m³    35,00 €    1.750,00 €"
+    const cells = line
+      .split(/\s{2,}/)
+      .map(cell => cell.trim())
+      .filter(cell => cell.length > 0);
+
+    if (cells.length > 1) {
+      const isHeader = /^(Pos|Position|Nr|Bezeichnung|Menge|Einheit|EP|GP|Preis|Gesamt)/i.test(
+        cells[0]
+      );
+
+      rows.push({
+        cells: cells.map((content, index) => ({ content, column: index })),
+        isHeader,
+      });
+    }
+  }
+
+  return rows;
+}
+
+/**
+ * Konvertiert Tabellen-Struktur in ParsedPositions
+ */
+export function tableToPositions(table: TableRow[]): ParsedPosition[] {
+  const positions: ParsedPosition[] = [];
+
+  // Filtere Header-Zeilen heraus
+  const dataRows = table.filter(row => !row.isHeader);
+
+  for (const row of dataRows) {
+    const position: ParsedPosition = {
+      description: '',
+    };
+
+    // Spalten-Mapping basierend auf typischen Layouts
+    if (row.cells.length >= 2) {
+      // Spalte 0: Nummer (z.B. "1", "Pos. 1")
+      const numberMatch = row.cells[0].content.match(/(\d+)/);
+      if (numberMatch) {
+        position.number = numberMatch[1];
+      }
+
+      // Spalte 1: Beschreibung
+      position.description = row.cells[1].content;
+
+      // Spalte 2: Menge + Einheit
+      if (row.cells.length >= 3) {
+        const quantityMatch = row.cells[2].content.match(/(\d+(?:[.,]\d+)?)\s*(\w+)?/);
+        if (quantityMatch) {
+          position.quantity = quantityMatch[1];
+          position.unit = quantityMatch[2] || '';
+        }
+      }
+
+      // Spalte 3 oder 4: Preis
+      if (row.cells.length >= 4) {
+        const priceMatch = row.cells[row.cells.length - 1].content.match(/([\d.,]+)/);
+        if (priceMatch) {
+          position.price = priceMatch[1];
+        }
+      }
+
+      if (position.description) {
+        positions.push(position);
+      }
+    }
+  }
+
+  return positions;
+}
+
+/**
+ * Intelligente Position-Extraktion mit Tabellenerkennung
+ * Kombiniert verschiedene Erkennungsmethoden
+ */
+export function extractPositionsAdvanced(text: string): ParsedPosition[] {
+  // Versuche zuerst Tabellen-Struktur zu erkennen
+  const tableStructure = detectTableStructure(text);
+
+  if (tableStructure.length > 0) {
+    console.log(`📊 Detected ${tableStructure.length} table rows`);
+    const tablePositions = tableToPositions(tableStructure);
+    if (tablePositions.length > 0) {
+      return tablePositions;
+    }
+  }
+
+  // Fallback: Standard-Extraktion
+  console.log('📝 Using standard position extraction');
+  return extractPositions(text);
 }

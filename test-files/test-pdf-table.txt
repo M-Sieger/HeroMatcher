@@ -1,0 +1,9 @@
+ANGEBOT - Neubau Einfamilienhaus
+
+Pos.    Bezeichnung                    Menge      EP          GP
+1       Erdarbeiten                    50 m³      35,00 €     1.750,00 €
+2       Fundamentarbeiten              20 m³      120,00 €    2.400,00 €
+3       Mauerarbeiten                  150 m²     85,00 €     12.750,00 €
+4       Dacheindeckung                 80 m²      95,00 €     7.600,00 €
+
+Gesamtsumme: 24.500,00 €
